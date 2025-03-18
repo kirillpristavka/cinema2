@@ -23,13 +23,26 @@ const Auth = () => {
     );
   }, []);
 
-  const login = useCallback(async () => {
-    try {
+  const login = async () => {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+      credentials: "include",
+    });
+    if (response.ok) {
+      //const data = await response.json();
+      // data.token -- ваш JWT
+      // data.user -- пользователь
+      // Далее, например, сохраняем токен в localStorage и редиректим:
+      //localStorage.setItem("token", data.token);
       router.push("/");
-    } catch (error) {
-      console.log(error);
+    } else {
+      console.log("Error logging in");
     }
-  }, [email, password, router]);
+  };
 
   const register = useCallback(async () => {
     try {

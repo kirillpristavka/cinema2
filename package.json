@@ -9,11 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node-fetch": "^2.6.12",
     "axios": "^1.8.2",
+    "jsonwebtoken": "^9.0.2",
+    "mkcert": "^3.2.0",
     "next": "15.2.1",
+    "node-fetch": "^3.3.2",
+    "openssl": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -21,6 +29,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.8.2"
   }
 }

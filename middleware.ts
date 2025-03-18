@@ -1,30 +1,35 @@
-import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { jwtVerify } from "jose";
 
-export function middleware(req: NextRequest) {
-  // проверяем путь
-  const { pathname } = req.nextUrl;
+export async function middleware(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
 
-  // Список защищённых роутов
-  if (pathname.startsWith("/profile") || pathname === "/") {
-    // Читаем куки
-    const token = req.cookies.get("token")?.value; // 'token' - название нашей cookie
-
+  // Список защищаемых путей, например:
+  if (
+    req.nextUrl.pathname.startsWith("/proflie") ||
+    req.nextUrl.pathname === "/"
+  ) {
     if (!token) {
-      // нет куки => редирект на /login
-      console.log("No token");
       return NextResponse.redirect(new URL("/auth", req.url));
     }
 
-    // Проверяем валидность токена
-    // try {
-    //   jwt.verify(token, process.env.JWT_SECRET || "SUPERSECRET");
-    // } catch (err) {
-    //   // невалиден => редирект
-    //   console.log(err);
-    //   return NextResponse.redirect(new URL("/auth", req.url));
-    // }
+    try {
+      // Преобразуем секрет в Uint8Array
+      const secret = new TextEncoder().encode(
+        process.env.JWT_SECRET || "SUPERSECRET"
+      );
+      await jwtVerify(token, secret);
+      // Если верификация успешна, продолжаем выполнение
+    } catch (err) {
+      console.error("JWT verification error:", err);
+      return NextResponse.redirect(new URL("/auth", req.url));
+    }
   }
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/profile", "/"],
+};
